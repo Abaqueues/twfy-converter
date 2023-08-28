@@ -4,9 +4,9 @@ import os
 import re
 
 # Set folder locations for XML input, JSON output, and merged intermediate XML files
-xml_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\test\\xml'
-json_output_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\test\\json' 
-merged_xml_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\test\\merged'
+xml_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\final\\xml'
+json_output_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\final\\json' 
+merged_xml_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\final\\merged'
 
 # Check whether the input and output folders exist
 os.makedirs(xml_folder, exist_ok=True)
@@ -32,11 +32,12 @@ def match_file_dates():
 def merge_xml_data(file_list):
     merged_file_list = []
     for files in file_list:
+        print(files)
         match = re.search(date_pattern, files[0])
         merged_root = ET.Element("merged_data" + match.group())
         for xml_file in files:
             xml_path = os.path.join(xml_folder, xml_file)
-            with open(xml_path, "r", encoding="UTF-8") as file:
+            with open(xml_path, "r", encoding="unicode_escape") as file:
                 xml_data = file.read()
                 root = ET.fromstring(xml_data)
                 for element in root:
@@ -44,7 +45,7 @@ def merge_xml_data(file_list):
         merged_file = ET.ElementTree(merged_root)
         merged_file.write(merged_xml_folder + "\\merged" + match.group() + ".xml")
         merged_file_list.append("merged" + match.group() + ".xml")
-    print("\nMerged files:", *merged_file_list, sep = "\n- ")
+    # print("\nMerged files:", *merged_file_list, sep = "\n- ")
         
 merge_xml_data(match_file_dates())
 
@@ -67,13 +68,14 @@ def report_division_files():
             division_true_list.append(file)
         else:
             division_false_list.append(file)
-    print("\nFiles containing division:", *division_true_list, sep = "\n- ")
-    print("\nFiles missing division:", *division_false_list, sep = "\n- ")
+    # print("\nFiles containing division:", *division_true_list, sep = "\n- ")
+    # print("\nFiles missing division:", *division_false_list, sep = "\n- ")
     return division_true_list
 
 # Function that assigns division vote labels to XML speech tags
 def assign_vote_labels(file_list):
     for file in file_list:
+        print(file)
         divisions = {}
         tree = ET.parse(merged_xml_folder + "\\" + file)
         root = tree.getroot()
@@ -114,8 +116,13 @@ def assign_vote_labels(file_list):
                 
         # Adds the collected data to the .json file
         json_data = json.dumps(data, indent=4)
-        with open(json_path, 'w', encoding='utf-8') as file:
+        with open(json_path, "w") as file:
             file.write(json_data)
+            print(json_path)
+            
+assign_vote_labels(report_division_files())
+
+         
             
 # def convert_unicode():
 #     for file in os.listdir(json_output_folder):
@@ -126,8 +133,6 @@ def assign_vote_labels(file_list):
 #             decoded_text = json_data.replace('\u2019', '\'')
 #         with open(json_path, 'w', encoding='utf-8') as json_file:
 #             json_file.write(decoded_text)
-                
-assign_vote_labels(report_division_files())
 
 # Parse merged XML data 
 # for xml_file in os.listdir(xml_folder):
