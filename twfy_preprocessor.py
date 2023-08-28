@@ -5,7 +5,7 @@ import re
 
 # Set folder locations for XML input, JSON output, and merged intermediate XML files
 xml_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\test\\xml'
-# json_output_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\json' 
+json_output_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\test\\json' 
 merged_xml_folder = 'E:\\Documents\\Education\\PG University of Birmingham\\MSc Computer Science\\Summer Semester\\MSc Projects\\Project Files\\Dataset\\test\\merged'
 
 # Check whether the input and output folders exist
@@ -91,14 +91,43 @@ def assign_vote_labels(file_list):
                     if mps_votes["division_id"] == match.group() and "person_id" in speech.attrib:
                         if speech.attrib["person_id"] in mps_votes:
                             mp_vote = mps_votes[speech.attrib["person_id"]]
-                            speech.set("vote", mp_vote)
-
+                            speech.set("vote", mp_vote)        
+        
+        # Iterates through each element, collating any text speech content
+        match = re.search(r'\d{4}-\d{2}-\d{2}', file)
+        json_filename = match.group(0) + ".json"
+        json_path = os.path.join(json_output_folder, json_filename)
+        
+        data = []
+        
+        for element in root:
+            if element.tag in ["speech"] and "person_id" in element.attrib:
+                item = {}
+                for sub_element in element:
+                    item[sub_element.tag] = sub_element.text
+                element_data = {
+                    "tag": element.tag,
+                    "attributes": element.attrib,
+                    "text": item
+                }
+                data.append(element_data)
+                
+        # Adds the collected data to the .json file
+        json_data = json.dumps(data, indent=4)
+        with open(json_path, 'w', encoding='utf-8') as file:
+            file.write(json_data)
+            
+# def convert_unicode():
+#     for file in os.listdir(json_output_folder):
+#         json_path = os.path.join(json_output_folder, file)
+#         with open(json_path, 'r+', encoding='utf-8') as json_file:
+#             json_data = json_file.read()
+#             # decoded_text = json_data.encode('utf-8').decode('\u2019')
+#             decoded_text = json_data.replace('\u2019', '\'')
+#         with open(json_path, 'w', encoding='utf-8') as json_file:
+#             json_file.write(decoded_text)
+                
 assign_vote_labels(report_division_files())
-
-# Function that parses XML speech data into JSON files
-# def parse_XML_to_JSON()
-
-
 
 # Parse merged XML data 
 # for xml_file in os.listdir(xml_folder):
