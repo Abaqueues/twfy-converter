@@ -1,4 +1,4 @@
-git import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET
 import json
 import os
 import re
@@ -45,8 +45,6 @@ def merge_xml_data(file_list):
         merged_file.write(_MERGED_XML_FOLDER + "\\merged" + match.group() + ".xml")
         merged_file_list.append("merged" + match.group() + ".xml")
     # print("\nMerged files:", *merged_file_list, sep = "\n- ")
-        
-merge_xml_data(match_file_dates())
 
 # Function to check whether an XML file contains a division
 def contains_division(xml_file):
@@ -122,8 +120,12 @@ def assign_vote_labels(file_list):
                     data.append(element_data)
                 
         # Writes the collected data to the JSON file
-        json_data = json.dumps(data, indent=4)
+        json_data = ""
+        for speech in data:
+            json_data += json.dumps(speech, indent=4)
+            json_data += "\n"
         with open(json_path, "w", encoding="utf-8") as file:
             file.write(json_data)
             
+merge_xml_data(match_file_dates())
 assign_vote_labels(report_division_files())
