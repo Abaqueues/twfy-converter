@@ -115,7 +115,8 @@ def assign_vote_labels(file_list):
                     element_data = {
                         "tag": element.tag,
                         "attributes": element.attrib,
-                        "text": item
+                        "text": item,
+                        "vote": element.attrib["vote"]
                     }
                     data.append(element_data)
                 
