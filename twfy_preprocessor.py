@@ -120,7 +120,7 @@ def assign_vote_labels(file_list):
                     data.append(element_data)
                 
         # Writes the collected data to the JSON file
-        json_data = json.dumps(speech, indent=4)
+        json_data = json.dumps(data, indent=4)
         with open(json_path, "w", encoding="utf-8") as file:
             file.write(json_data)
             
