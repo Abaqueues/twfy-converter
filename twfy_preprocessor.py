@@ -120,7 +120,8 @@ def assign_vote_labels(file_list):
                         "speakername": element.attrib["speakername"],
                         "person_id": element.attrib["person_id"],
                         "url": element.attrib["url"],
-                        "vote": element.attrib["vote"]
+                        "vote": element.attrib["vote"],
+                        "date": match.group(0),
                     }
                     data.append(element_data)
                 
