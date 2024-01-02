@@ -1,9 +1,7 @@
-# TWFYPreprocessor.py
-
-## TheyWorkForYouPreprocessor
+# twfy-converter
 
 ## Description
-A Python data preprocessor that prepares raw XML data files for sentiment analysis. The raw XML data files containing division data are merged into an intermediate file. These files are then iterated through, in a process that assigns vote labels to speech tags by matching MP 'person-id' attributes. The labelled speech tags are then extracted and written to a separate JSON file format. 
+A Python data wrangler that converts raw XML data into a JSON format, ready for data preprocessing. The raw XML data files containing division data are merged into an intermediate file. These files are then iterated through, in a process that assigns vote labels to speech tags by matching MP 'person-id' attributes. The labelled speech tags are then extracted and written to a separate JSON file format. 
 
 The raw XML data files presented a number of challenges:
 
@@ -19,4 +17,4 @@ Run the application. The constants at the top of the page point to the relevant 
 ## Roadmap
 Ideally, in the interest of saving time, this application would skip steps if no further changes need to be made to specific files, i.e. skipping the intermediate merged file stage if these files already exist. 
 
-Due to the numerous stages of preprocessing and the time it takes to run the program, terminal loading bars might provide a clearer visual cue of the preprocessing progress. 
+Due to the numerous stages of preprocessing and the time it takes to run the program, terminal loading bars (using the `progress` package) might provide a clearer visual cue of the preprocessing progress. 
